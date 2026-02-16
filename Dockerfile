@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone SearxNG
-RUN git clone https://github.com/searxng/searxng.git .
+# RUN git clone https://github.com/searxng/searxng.git .
 
 # Install Python deps
 RUN pip install --no-cache-dir -r requirements.txt
