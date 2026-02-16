@@ -1,2 +1,2 @@
 #!/bin/sh
-docker compose up
+python -m searx.webapp
