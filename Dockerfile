@@ -18,7 +18,8 @@ RUN git clone https://github.com/searxng/searxng.git .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your settings
-COPY settings /etc/searxng
+# COPY settings /etc/searxng
+COPY settings.yml /etc/searxng/settings.yml
 
 ENV SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
 ENV PORT=8080
