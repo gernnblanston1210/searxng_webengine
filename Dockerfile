@@ -21,12 +21,7 @@ COPY settings.yml /etc/searxng/settings.yml
 # 5. Environment Variables
 ENV SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
 ENV PYTHONPATH=/usr/local/searxng
-ENV PORT=8080
+ENV PORT=7860
+EXPOSE 7860
 
-# 6. The Command (Crucial for Railway)
-# We use '0.0.0.0' to ensure it listens externally
-CMD uwsgi --http-socket 0.0.0.0:${PORT} \
-    --module searx.webapp \
-    --master \
-    --processes 4 \
-    --threads 2
+CMD ["python", "searx/webapp.py"]
