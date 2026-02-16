@@ -1,35 +1,32 @@
 FROM python:3.11-slim
 
-# Install system dependencies (added ffi and ssl)
+# 1. Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    build-essential \
-    libxslt-dev \
-    libxml2-dev \
-    zlib1g-dev \
-    libffi-dev \
-    libssl-dev \
+    git build-essential libxslt-dev libxml2-dev \
+    zlib1g-dev libffi-dev libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+# 2. Set the working directory
+WORKDIR /usr/local/searxng
 
-# IMPORTANT: Only keep the next line if your repo IS EMPTY. 
-# If your repo already has SearXNG files, remove this line:
-RUN git clone https://github.com/searxng/searxng.git .
+# 3. Clone and install
+RUN git clone https://github.com/searxng/searxng.git . \
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir uwsgi
 
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir uwsgi
-
-# Ensure the config directory exists before copying
+# 4. Handle settings
 RUN mkdir -p /etc/searxng
 COPY settings.yml /etc/searxng/settings.yml
 
+# 5. Environment Variables
 ENV SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
-# Allow Railway to set the port
+ENV PYTHONPATH=/usr/local/searxng
 ENV PORT=8080
 
-EXPOSE 8080
-
-# Using uWSGI is much more stable for Railway builds
-# CMD uwsgi --http-socket :${PORT} --module searx.webapp --master --processes 4 --threads 2
-CMD uwsgi --http-socket :${PORT:-8080} --module searx.webapp --master --processes 4 --threads 2
+# 6. The Command (Crucial for Railway)
+# We use '0.0.0.0' to ensure it listens externally
+CMD uwsgi --http-socket 0.0.0.0:${PORT} \
+    --module searx.webapp \
+    --master \
+    --processes 4 \
+    --threads 2
