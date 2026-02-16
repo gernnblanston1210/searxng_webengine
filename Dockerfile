@@ -31,4 +31,5 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Using uWSGI is much more stable for Railway builds
-CMD uwsgi --http-socket :${PORT} --module searx.webapp --master --processes 4 --threads 2
+# CMD uwsgi --http-socket :${PORT} --module searx.webapp --master --processes 4 --threads 2
+CMD uwsgi --http-socket :${PORT:-8080} --module searx.webapp --master --processes 4 --threads 2
