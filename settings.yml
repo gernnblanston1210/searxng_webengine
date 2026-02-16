@@ -1,7 +1,7 @@
 use_default_settings: true
 
 server:
-  port: 8080
+  port: 7860        # Hugging Face requirement
   bind_address: "0.0.0.0"
   secret_key: "OGE2NGQyMmEtMjZlOS00YTM3LWE1YWYtNDQwNzhjZjM5MjNk"
 
