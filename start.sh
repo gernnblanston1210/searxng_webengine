@@ -1,2 +1,2 @@
 #!/bin/sh
-python -m searx.webapp
+python3 -m searx.webapp
